@@ -1,24 +1,23 @@
 .App {
-  text-align: center;
-}
+  &.ui.grid {
+    margin: 200px;
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
+    .DropZone {
+      width: 300px;
+      height: 300px;
+      border-width: 6px;
+      border-color: rgb(242, 113, 28);
+      border-style: dashed;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+      label {
+        position: absolute;
+        font-weight: 600;
+        font-size: small;
+      }
+    }
+  }
 }

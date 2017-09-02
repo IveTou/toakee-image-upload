@@ -25,6 +25,10 @@ class App extends React.Component {
     this.setState({ files: this.state.files.filter(e => { return e !== file })})
   }
 
+  onErase(){
+    this.setState({files: {}, filesUrl: {}})
+  }
+
   handleImageUpload() {
     request.post(`${CLOUDINARY_API_URI}/upload`)
       .field('upload_preset', UPLOAD_FLYER_PRESET)
@@ -36,12 +40,14 @@ class App extends React.Component {
 
         if (response.body.secure_url !== '') {
           this.setState({ filesUrl: response.body.secure_url });
+          console.log(this.state.filesUrl);
         }
       });
   }
 
   renderSelectedImages() {
     const { files } = this.state;
+
     if (!!!files.length) {
       return (
         <Item>
@@ -69,9 +75,15 @@ class App extends React.Component {
   }
 
   renderImageUrlList() {
-    return (
-      <List.Item>{}</List.Item>
-    );
+    const { filesUrl } = this.state;
+
+    if (!!!filesUrl.length) {
+      return <List.Item>There are no files uploaded yet.</List.Item>
+    } else {
+      //return filesUrl.map((url) =>
+        //<List.Item>{url}</List.Item>
+      //);
+    }
   }
 
   render() {
@@ -125,17 +137,8 @@ class App extends React.Component {
             On this area you can see the uploaded image files by their cloudinary URL. For reset
             the sistem and start again click on "Erase" to clean all data.
           </p>
-          <List>
-            <List.Item>Apples</List.Item>
-            <List.Item>Pears</List.Item>
-            <List.Item>Oranges</List.Item>
-          </List>
-          <Button
-            inverted
-            color="red"
-          >
-            Erase
-          </Button>
+          <List>{this.renderImageUrlList()}</List>
+          <Button inverted color="red" onClick={this.onErase}>Erase</Button>
         </Grid.Column>
         </Grid.Row>
       </Grid>

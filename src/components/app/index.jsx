@@ -19,7 +19,7 @@ class App extends React.Component {
   }
 
   onImageDrop(files) {
-    this.setState({ files });
+    this.setState({ files: [...this.state.files, ...files] });
   }
 
   handleImageUpload() {
@@ -48,7 +48,7 @@ class App extends React.Component {
             src="https://react.semantic-ui.com/assets/images/wireframe/image.png"
           />
           <Item.Content>
-            <label>There is no images yet.</label>
+            <label>There are no images yet.</label>
           </Item.Content>
         </Item>
       );
@@ -57,7 +57,7 @@ class App extends React.Component {
         <Item>
           <Item.Image name="name" size="tiny" src={file.preview} />
           <Item.Content>
-            <label>{file.name}</label>
+            <p>{file.name}</p>
             <Button>delete</Button>
           </Item.Content>
         </Item>
@@ -83,6 +83,10 @@ class App extends React.Component {
         <Grid.Row>
         <Grid.Column width={2}>
           <Header as="h3">Drop Zone</Header>
+          <p>
+            On this area you should insert files by drag an dop or click and select them.
+            It is possible to select a bunch os files or insert them one by one.
+          </p>
           <Segment>
             <Dropzone
               className="DropZone"
@@ -99,6 +103,10 @@ class App extends React.Component {
         </Grid.Column>
         <Grid.Column width={6}>
           <Header as="h3">Selected Images</Header>
+          <p>
+            On this area is showed the selected file to upload. Before upload it you can also
+            delete some of them. To upload, click on "Upload" button.
+          </p>
           <Item.Group>{this.renderSelectedImages()}</Item.Group>
           <Button
             inverted
@@ -110,6 +118,10 @@ class App extends React.Component {
         </Grid.Column>
         <Grid.Column width={8}>
           <Header as="h3" color="orange">Uploaded Images</Header>
+          <p>
+            On this area you can see the uploaded image files by their cloudinary URL. For reset
+            the sistem and start again click on "Erase" to clean all data.
+          </p>
           <List>
             <List.Item>Apples</List.Item>
             <List.Item>Pears</List.Item>

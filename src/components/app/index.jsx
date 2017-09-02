@@ -15,11 +15,14 @@ class App extends React.Component {
     super(props);
     this.state = { files: {}, filesUrl: {} };
     autoBind(this);
-    console.log(process.env);
   }
 
   onImageDrop(files) {
     this.setState({ files: [...this.state.files, ...files] });
+  }
+
+  onDeletePreview(file) {
+    this.setState({ files: this.state.files.filter(e => { return e !== file })})
   }
 
   handleImageUpload() {
@@ -58,7 +61,7 @@ class App extends React.Component {
           <Item.Image name="name" size="tiny" src={file.preview} />
           <Item.Content>
             <p>{file.name}</p>
-            <Button>delete</Button>
+            <Button onClick={() => this.onDeletePreview(file)}>delete</Button>
           </Item.Content>
         </Item>
       );

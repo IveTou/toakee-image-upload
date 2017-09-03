@@ -1,8 +1,9 @@
 import React from 'react';
-import { Container, Button, Grid, Header, Icon, Image, Item, List, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Icon, Item, List, Loader, Segment } from 'semantic-ui-react';
 import autoBind from 'react-autobind';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import { includes } from 'lodash';
 
 import 'semantic-ui-css/semantic.min.css';
 
@@ -13,7 +14,7 @@ const { CLOUDINARY_API_URI, UPLOAD_FLYER_PRESET } = config;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { files: {}, filesUrl: {} };
+    this.state = { files: {}, filesUrl: {}, loading: {} };
     autoBind(this);
   }
 
@@ -22,7 +23,7 @@ class App extends React.Component {
   }
 
   onDeletePreview(file) {
-    this.setState({ files: this.state.files.filter(e => { return e !== file })})
+    this.setState({ files: this.state.files.filter(e => { return e !== file })});
   }
 
   onErase(){
@@ -30,19 +31,25 @@ class App extends React.Component {
   }
 
   handleImageUpload() {
-    request.post(`${CLOUDINARY_API_URI}/upload`)
-      .field('upload_preset', UPLOAD_FLYER_PRESET)
-      .field('file', this.state.files)
-      .end((err, response) => {
-        if (err) {
-          console.error(err);
-        }
+    const files = this.state.files;
 
-        if (response.body.secure_url !== '') {
-          this.setState({ filesUrl: response.body.secure_url });
-          console.log(this.state.filesUrl);
-        }
-      });
+    for(const i in files) {
+      this.setState({ loading: [...this.state.loading, files[i]] });
+
+      request.post(`${CLOUDINARY_API_URI}/upload`)
+        .field('upload_preset', UPLOAD_FLYER_PRESET)
+        .field('file', files[i])
+        .end((err, response) => {
+          if (err) {
+            console.error(err);
+          }
+
+          if (response.body.secure_url !== '') {
+            this.setState({ filesUrl: [...this.state.filesUrl, response.body.secure_url] });
+            this.setState({ loading: this.state.loading.filter(e => { return e != files[i] }) });
+          }
+        });
+    }
   }
 
   renderSelectedImages() {
@@ -65,6 +72,7 @@ class App extends React.Component {
       return files.map((file) =>
         <Item>
           <Item.Image name="name" size="tiny" src={file.preview} />
+          <Loader active disabled={!includes(this.state.loading, file)} />
           <Item.Content>
             <p>{file.name}</p>
             <Button onClick={() => this.onDeletePreview(file)}>delete</Button>
@@ -80,9 +88,9 @@ class App extends React.Component {
     if (!!!filesUrl.length) {
       return <List.Item>There are no files uploaded yet.</List.Item>
     } else {
-      //return filesUrl.map((url) =>
-        //<List.Item>{url}</List.Item>
-      //);
+      return filesUrl.map((url) =>
+        <List.Item>{url}</List.Item>
+      );
     }
   }
 

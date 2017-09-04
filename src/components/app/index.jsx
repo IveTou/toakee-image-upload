@@ -5,9 +5,9 @@ import Dropzone from 'react-dropzone';
 import request from 'superagent';
 import { includes } from 'lodash';
 
-import 'semantic-ui-css/semantic.min.css';
-
 import config from '../../config';
+
+require('./style.scss');
 
 const { CLOUDINARY_API_URI, UPLOAD_FLYER_PRESET } = config;
 
@@ -46,7 +46,7 @@ class App extends React.Component {
 
           if (response.body.secure_url !== '') {
             this.setState({ filesUrl: [...this.state.filesUrl, response.body.secure_url] });
-            this.setState({ loading: this.state.loading.filter(e => { return e != files[i] }) });
+            this.setState({ loading: this.state.loading.filter(e => { return e !== files[i] }) });
           }
         });
     }
@@ -131,13 +131,13 @@ class App extends React.Component {
             delete some of them. To upload, click on "Upload" button.
           </p>
           <Item.Group>{this.renderSelectedImages()}</Item.Group>
-          <Button
-            inverted
-            color="orange"
-            onClick={this.handleImageUpload}
-          >
-            Upload
-          </Button>
+            <Button
+              inverted
+              color="orange"
+              onClick={this.handleImageUpload}
+            >
+              Upload
+            </Button>
         </Grid.Column>
         <Grid.Column width={8}>
           <Header as="h3" color="orange">Uploaded Images</Header>

@@ -7,7 +7,7 @@ import { includes } from 'lodash';
 
 import config from '../../config';
 
-require('./style.scss');
+require('./style.css');
 
 const { CLOUDINARY_API_URI, UPLOAD_FLYER_PRESET } = config;
 
@@ -74,8 +74,8 @@ class App extends React.Component {
           <Item.Image name="name" size="tiny" src={file.preview} />
           <Loader active disabled={!includes(this.state.loading, file)} />
           <Item.Content>
-            <p>{file.name}</p>
-            <Button onClick={() => this.onDeletePreview(file)}>delete</Button>
+            <div className="name">{file.name}</div>
+            <Button className="delete" onClick={() => this.onDeletePreview(file)}>delete</Button>
           </Item.Content>
         </Item>
       );
@@ -89,7 +89,7 @@ class App extends React.Component {
       return <List.Item>There are no files uploaded yet.</List.Item>
     } else {
       return filesUrl.map((url) =>
-        <List.Item>{url}</List.Item>
+        <List.Item className="name">{url}</List.Item>
       );
     }
   }
@@ -99,12 +99,12 @@ class App extends React.Component {
     const hasFile = !!files.length;
 
     return (
-      <Grid divided className="App">
+      <Grid divided columns={3} relaxed className="App">
         <Grid.Row>
           <Header as="h1">Image Upload Page</Header>
         </Grid.Row>
         <Grid.Row>
-        <Grid.Column width={2}>
+        <Grid.Column className="drop">
           <Header as="h3">Drop Zone</Header>
           <p>
             On this area you should insert files by drag an dop or click and select them.
@@ -124,7 +124,7 @@ class App extends React.Component {
             </Dropzone>
           </Segment>
         </Grid.Column>
-        <Grid.Column width={6}>
+        <Grid.Column>
           <Header as="h3">Selected Images</Header>
           <p>
             On this area is showed the selected file to upload. Before upload it you can also
@@ -139,7 +139,7 @@ class App extends React.Component {
               Upload
             </Button>
         </Grid.Column>
-        <Grid.Column width={8}>
+        <Grid.Column>
           <Header as="h3" color="orange">Uploaded Images</Header>
           <p>
             On this area you can see the uploaded image files by their cloudinary URL. For reset

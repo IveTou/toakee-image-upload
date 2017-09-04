@@ -1,0 +1,41 @@
+.App.ui.grid.three {
+  margin: 8px;
+}
+
+.DropZone {
+  text-align: center;
+}
+
+.content {
+  width: 80%;
+}
+
+.name {
+  padding: 8px;
+  word-wrap: break-word;
+}
+
+.button.delete {
+  margin: 8px !important;
+}
+
+.column.drop {
+  width: 20% !important;
+}
+
+.loader {
+  position: relative;
+  left: -32px;
+  top: 48px;
+}
+
+@media screen and (max-width: 700px) {
+  .column {
+    width: 100% !important;
+    margin-bottom: 32px !important;
+  }
+
+  .column.drop {
+    width: 100% !important;
+  }
+}

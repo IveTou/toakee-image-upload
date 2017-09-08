@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid, Header, Icon, Item, List, Loader, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Icon, Input, Item, List, Loader, Segment } from 'semantic-ui-react';
 import autoBind from 'react-autobind';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
@@ -14,8 +14,12 @@ const { CLOUDINARY_API_URI, UPLOAD_FLYER_PRESET } = config;
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { files: {}, filesUrl: {}, loading: {} };
+    this.state = { files: {}, filesUrl: {}, loading: {}, target: '' };
     autoBind(this);
+  }
+
+  onInputChange(e, { value }) {
+    this.setState({ target: value });
   }
 
   onImageDrop(files) {
@@ -31,14 +35,15 @@ class App extends React.Component {
   }
 
   handleImageUpload() {
-    const files = this.state.files;
+    const { files, target } = this.state;
 
     for(const i in files) {
       this.setState({ loading: [...this.state.loading, files[i]] });
-
+      console.log(files[i]);
       request.post(`${CLOUDINARY_API_URI}/upload`)
         .field('upload_preset', UPLOAD_FLYER_PRESET)
         .field('file', files[i])
+        .field('public_id', `${target}/${files[i].name.substr(0, files[i].name.lastIndexOf('.'))}`)
         .end((err, response) => {
           if (err) {
             console.error(err);
@@ -110,6 +115,7 @@ class App extends React.Component {
             On this area you should insert files by drag an dop or click and select them.
             It is possible to select a bunch os files or insert them one by one.
           </p>
+          <Input placeholder='ID do Evento' onChange={this.onInputChange} />
           <Segment>
             <Dropzone
               className="DropZone"

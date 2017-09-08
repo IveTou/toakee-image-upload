@@ -2,6 +2,10 @@
   margin: 8px;
 }
 
+input {
+  max-width: 80% !important;
+}
+
 .DropZone {
   text-align: center;
 }

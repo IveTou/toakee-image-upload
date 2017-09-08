@@ -31,15 +31,20 @@ class App extends React.Component {
   }
 
   onErase(){
-    this.setState({files: {}, filesUrl: {}})
+    this.setState({files: {}, filesUrl: {}, target: ''})
   }
 
   handleImageUpload() {
     const { files, target } = this.state;
 
+    if(target === '' || files.length === 0 ) {
+      console.log('Empty target or files');
+      return;
+    }
+
     for(const i in files) {
       this.setState({ loading: [...this.state.loading, files[i]] });
-      console.log(files[i]);
+
       request.post(`${CLOUDINARY_API_URI}/upload`)
         .field('upload_preset', UPLOAD_FLYER_PRESET)
         .field('file', files[i])
@@ -91,11 +96,9 @@ class App extends React.Component {
     const { filesUrl } = this.state;
 
     if (!!!filesUrl.length) {
-      return <List.Item>There are no files uploaded yet.</List.Item>
+      return <List.Item>There are no files uploaded yet.</List.Item>;
     } else {
-      return filesUrl.map((url) =>
-        <List.Item className="name">{url}</List.Item>
-      );
+      return <p className="name">{JSON.stringify(filesUrl)}</p>;
     }
   }
 

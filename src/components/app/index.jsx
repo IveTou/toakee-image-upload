@@ -1,21 +1,25 @@
 import React from 'react';
-import { Button, Grid, Header, Icon, Input, Item, List, Loader, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Grid, Header, Icon, Input, Item, List, Loader, Segment } from 'semantic-ui-react';
 import autoBind from 'react-autobind';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
-import { includes } from 'lodash';
+import { includes, pick } from 'lodash';
 
 import config from '../../config';
 
 require('./style.css');
 
-const { CLOUDINARY_API_URI, UPLOAD_FLYER_PRESET } = config;
+const { CLOUDINARY_API_URI, UPLOAD_FLYER_PRESET, UPLOAD_PHOTO_PRESET } = config;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { files: {}, filesUrl: {}, loading: {}, target: '' };
+    this.state = { type: 'flyer', files: {}, filesUrl: {}, loading: {}, target: '' };
     autoBind(this);
+  }
+
+  onCheckboxChange(e, { checked }) {
+    this.setState({ type: checked ? 'photo' : 'flyer', files: {}, filesUrl: {}, target: '' });
   }
 
   onInputChange(e, { value }) {
@@ -35,7 +39,7 @@ class App extends React.Component {
   }
 
   handleImageUpload() {
-    const { files, target } = this.state;
+    const { type, files, target } = this.state;
 
     if(target === '' || files.length === 0 ) {
       console.log('Empty target or files');
@@ -44,9 +48,11 @@ class App extends React.Component {
 
     for(const i in files) {
       this.setState({ loading: [...this.state.loading, files[i]] });
+      const image = { src: '', thumb: '', flyer: '', flyer_mobile: ''};
+      const preset = type === 'flyer' ? UPLOAD_FLYER_PRESET : UPLOAD_PHOTO_PRESET;
 
       request.post(`${CLOUDINARY_API_URI}/upload`)
-        .field('upload_preset', UPLOAD_FLYER_PRESET)
+        .field('upload_preset', preset)
         .field('file', files[i])
         .field('public_id', `${target}/${files[i].name.substr(0, files[i].name.lastIndexOf('.'))}`)
         .end((err, response) => {
@@ -55,7 +61,27 @@ class App extends React.Component {
           }
 
           if (response.body.secure_url !== '') {
-            this.setState({ filesUrl: [...this.state.filesUrl, response.body.secure_url] });
+            image.src  = response.body.secure_url;
+
+            if(type === 'flyer') {
+              image.flyer = response.body.eager[0].secure_url;
+              image.flyer_mobile = response.body.eager[1].secure_url;
+              this.setState({
+                filesUrl: [
+                  ...this.state.filesUrl,
+                  pick(image, ['src', 'flyer', 'flyer_mobile'])
+                ]
+              });
+            } else {
+              image.thumb = response.body.eager[0].secure_url;
+              this.setState({
+                filesUrl: [
+                  ...this.state.filesUrl,
+                  pick(image, ['src', 'thumb'])
+                ]
+              });
+            }
+
             this.setState({ loading: this.state.loading.filter(e => { return e !== files[i] }) });
           }
         });
@@ -110,6 +136,16 @@ class App extends React.Component {
       <Grid divided columns={3} relaxed className="App">
         <Grid.Row>
           <Header as="h1">Image Upload Page</Header>
+        </Grid.Row>
+        <Grid.Row>
+          <Segment>
+            <Header as="h4">Select the type of your upload</Header>
+            <span>
+              Event Flyer
+              <Checkbox toggle onChange={this.onCheckboxChange} />
+              Event Photo
+            </span>
+          </Segment>
         </Grid.Row>
         <Grid.Row>
         <Grid.Column className="drop">

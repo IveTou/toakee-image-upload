@@ -19,7 +19,7 @@ class App extends React.Component {
   }
 
   onCheckboxChange(e, { checked }) {
-    this.setState({ type: checked ? 'photo' : 'flyer', files: {}, filesUrl: {}, target: '' });
+    this.setState({ type: checked ? 'photo' : 'flyer', files: {}, filesUrl: {} });
   }
 
   onInputChange(e, { value }) {
@@ -129,9 +129,6 @@ class App extends React.Component {
   }
 
   render() {
-    const { files, filesUrl } = this.state;
-    const hasFile = !!files.length;
-
     return (
       <Grid divided columns={3} relaxed className="App">
         <Grid.Row>

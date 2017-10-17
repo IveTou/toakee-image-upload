@@ -35,7 +35,7 @@ class App extends React.Component {
   }
 
   onErase(){
-    this.setState({files: {}, filesUrl: {}, target: ''})
+    this.setState({files: {}, filesUrl: {}});
   }
 
   handleImageUpload() {
@@ -145,51 +145,51 @@ class App extends React.Component {
           </Segment>
         </Grid.Row>
         <Grid.Row>
-        <Grid.Column className="drop">
-          <Header as="h3">Drop Zone</Header>
-          <p>
-            On this area you should insert files by drag an dop or click and select them.
-            It is possible to select a bunch os files or insert them one by one.
-          </p>
-          <Input placeholder='ID do Evento' onChange={this.onInputChange} />
-          <Segment>
-            <Dropzone
-              className="DropZone"
-              multiple={true}
-              accept="image/*"
-              onDrop={this.onImageDrop}
-            >
-              <div>
-                <Icon name='upload' size='huge' color="blue" />
-                <p>Drop files here or click to upload</p>
-              </div>
-            </Dropzone>
-          </Segment>
-        </Grid.Column>
-        <Grid.Column>
-          <Header as="h3">Selected Images</Header>
-          <p>
-            On this area is showed the selected file to upload. Before upload it you can also
-            delete some of them. To upload, click on "Upload" button.
-          </p>
-          <Item.Group>{this.renderSelectedImages()}</Item.Group>
-            <Button
-              inverted
-              color="orange"
-              onClick={this.handleImageUpload}
-            >
-              Upload
-            </Button>
-        </Grid.Column>
-        <Grid.Column>
-          <Header as="h3" color="orange">Uploaded Images</Header>
-          <p>
-            On this area you can see the uploaded image files by their cloudinary URL. For reset
-            the sistem and start again click on "Erase" to clean all data.
-          </p>
-          <List>{this.renderImageUrlList()}</List>
-          <Button inverted color="red" onClick={this.onErase}>Erase</Button>
-        </Grid.Column>
+          <Grid.Column className="drop">
+            <Header as="h3">Drop Zone</Header>
+            <p>
+              On this area you should insert files by drag an dop or click and select them.
+              It is possible to select a bunch os files or insert them one by one.
+            </p>
+            <Input placeholder='ID do Evento' onChange={this.onInputChange} />
+            <Segment>
+              <Dropzone
+                className="DropZone"
+                multiple={true}
+                accept="image/*"
+                onDrop={this.onImageDrop}
+              >
+                <div>
+                  <Icon name='upload' size='huge' color="blue" />
+                  <p>Drop files here or click to upload</p>
+                </div>
+              </Dropzone>
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h3">Selected Images</Header>
+            <p>
+              On this area is showed the selected file to upload. Before upload it you can also
+              delete some of them. To upload, click on "Upload" button.
+            </p>
+            <Item.Group>{this.renderSelectedImages()}</Item.Group>
+              <Button
+                inverted
+                color="orange"
+                onClick={this.handleImageUpload}
+              >
+                Upload
+              </Button>
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h3" color="orange">Uploaded Images</Header>
+            <p>
+              On this area you can see the uploaded image files by their cloudinary URL. For reset
+              the sistem and start again click on "Erase" to clean all data.
+            </p>
+            <List>{this.renderImageUrlList()}</List>
+            <Button inverted color="red" onClick={this.onErase}>Erase</Button>
+          </Grid.Column>
         </Grid.Row>
       </Grid>
     );

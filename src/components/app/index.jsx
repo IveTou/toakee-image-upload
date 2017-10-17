@@ -1,5 +1,16 @@
 import React from 'react';
-import { Button, Checkbox, Grid, Header, Icon, Input, Item, List, Loader, Segment } from 'semantic-ui-react';
+import {
+  Button,
+  Checkbox,
+  Grid,
+  Header,
+  Icon,
+  Input,
+  Item,
+  List,
+  Loader,
+  Segment
+} from 'semantic-ui-react';
 import autoBind from 'react-autobind';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
@@ -148,8 +159,8 @@ class App extends React.Component {
           <Grid.Column className="drop">
             <Header as="h3">Drop Zone</Header>
             <p>
-              On this area you should insert files by drag an dop or click and select them.
-              It is possible to select a bunch os files or insert them one by one.
+              On this area you should insert files by a "drag an drop" action or clicking at the area and selecting them.
+              It is possible to select a bunch of files or insert them one by one. Don`t forget to specify an event ID.
             </p>
             <Input placeholder='ID do Evento' onChange={this.onInputChange} />
             <Segment>
@@ -184,8 +195,8 @@ class App extends React.Component {
           <Grid.Column>
             <Header as="h3" color="orange">Uploaded Images</Header>
             <p>
-              On this area you can see the uploaded image files by their cloudinary URL. For reset
-              the sistem and start again click on "Erase" to clean all data.
+              On this area you can see the uploaded image files by their cloudinary URL. In order reset
+              the system and start again you should click on "Erase" to clean all data.
             </p>
             <List>{this.renderImageUrlList()}</List>
             <Button inverted color="red" onClick={this.onErase}>Erase</Button>
